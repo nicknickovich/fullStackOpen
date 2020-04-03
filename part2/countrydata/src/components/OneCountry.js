@@ -1,7 +1,7 @@
 import React from 'react'
 
 const OneCountry = (props) => {
-  const country = props.countries[0]
+  const country = props.country
   return (
     <div>
       <h2>{country.name}</h2>

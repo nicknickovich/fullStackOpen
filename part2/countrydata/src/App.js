@@ -25,6 +25,22 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  const showMore = (name) => {
+    setCountries(countries.map(
+      country => country.name === name
+                 ? { ...country, showMore: true }
+                 : country
+    ))
+  }
+
+  const showLess = (name) => {
+    setCountries(countries.map(
+      country => country.name === name
+                 ? { ...country, showMore: false }
+                 : country
+    ))
+  }
+
   if (countriesToShow.length === 0) {
     return (
       <div>
@@ -45,7 +61,8 @@ const App = () => {
           onChange={handleSearchChange}
         />
         <OneCountry
-          countries={countriesToShow}
+          country={countriesToShow}
+          showMoreOnClick={showMore}
         />
       </div>
     )
@@ -59,6 +76,8 @@ const App = () => {
         />
         <CountriesList
           countries={countriesToShow}
+          showMoreOnClick={showMore}
+          showLessOnClick={showLess}
         />
       </div>
     )
