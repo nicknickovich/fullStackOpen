@@ -24,8 +24,7 @@ const App = () => {
     event.preventDefault()
     const newPerson = {
       name: newName,
-      number: newNumber,
-      id: persons.length + 1
+      number: newNumber
     }
     const allPersonsNames = persons.map(
       person => person.name
@@ -33,10 +32,14 @@ const App = () => {
     if (allPersonsNames.includes(newPerson.name)) {
       alert(`${newPerson.name} is already in the phonebook`)
     } else {
-      setPersons(persons.concat(newPerson))
+      axios
+        .post("http://localhost:3001/persons", newPerson)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+      })
     }
-    setNewName('')
-    setNewNumber('')
   }
 
   const handleNameChange = (event) => {
