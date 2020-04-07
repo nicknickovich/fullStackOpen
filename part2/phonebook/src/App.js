@@ -57,6 +57,16 @@ const App = () => {
               .includes(search.toLowerCase())
   )
 
+const removePerson = (person) => {
+  if (window.confirm(`Remove ${person.name}?`)){
+    personsService
+    .remove(person.id)
+    .then(personsData => {
+      setPersons(persons.filter(n => n.id !== person.id))
+    })
+  }
+}
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -74,7 +84,7 @@ const App = () => {
         numberOnChange={handleNumberChange}
       />
       <h3>Numbers</h3>
-        <Persons persons={personsToShow} />
+        <Persons persons={personsToShow} onClick={removePerson} />
     </div>
   )
 }

@@ -9,6 +9,7 @@ const Persons = (props) => {
           key={person.id}
           name={person.name}
           number={person.number}
+          onClick={() => props.onClick(person)}
         />
       )}
     </ul>
