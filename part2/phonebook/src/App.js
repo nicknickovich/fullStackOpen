@@ -28,7 +28,23 @@ const App = () => {
       person => person.name
     )
     if (allPersonsNames.includes(newPerson.name)) {
-      alert(`${newPerson.name} is already in the phonebook`)
+      if (window.confirm(
+        `${newPerson.name} is already in the phonebook, `
+        + `replace old number with a new one?`)) {
+        const personToChange = persons.find(
+          person => person.name === newPerson.name
+        )
+        const changedPerson = { ...personToChange, number: newNumber }
+        personsService
+          .update(changedPerson.id, newPerson)
+          .then(updatedPersonData => {
+            setPersons(persons.map(person =>
+              person.id === updatedPersonData.id ? changedPerson : person
+            ))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
     } else {
       personsService
         .create(newPerson)
@@ -36,7 +52,7 @@ const App = () => {
           setPersons(persons.concat(personsData))
           setNewName('')
           setNewNumber('')
-      })
+        })
     }
   }
 
@@ -61,9 +77,9 @@ const removePerson = (person) => {
   if (window.confirm(`Remove ${person.name}?`)){
     personsService
     .remove(person.id)
-    .then(personsData => {
+    .then(
       setPersons(persons.filter(n => n.id !== person.id))
-    })
+    )
   }
 }
 
