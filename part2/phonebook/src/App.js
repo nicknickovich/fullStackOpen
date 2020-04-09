@@ -14,6 +14,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch ] = useState('')
   const [ notificationMessage, setNotificationMessage ] = useState(null)
+  const [ errorMessage, setErrorMessage ] = useState(null)
 
   useEffect(() => {
     personsService
@@ -39,7 +40,7 @@ const App = () => {
         )
         const changedPerson = { ...personToChange, number: newNumber }
         personsService
-          .update(changedPerson.id, newPerson)
+          .update(changedPerson.id, changedPerson)
           .then(updatedPersonData => {
             setPersons(persons.map(person =>
               person.id === updatedPersonData.id ? changedPerson : person
@@ -48,10 +49,19 @@ const App = () => {
             setNewNumber('')
           })
           .then(() => {
-            setNotificationMessage(`Updated ${newPerson.name}'s number`)
+            setNotificationMessage(`Updated ${changedPerson.name}'s number`)
             setTimeout(() => {
               setNotificationMessage(null)
             }, 5000)
+          })
+          .catch(error => {
+            setErrorMessage(
+              `${changedPerson.name} has been removed from the server`
+            )
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+            setPersons(persons.filter(n => n.id !== changedPerson.id))
           })
       }
     } else {
@@ -92,9 +102,22 @@ const removePerson = (person) => {
   if (window.confirm(`Remove ${person.name}?`)){
     personsService
     .remove(person.id)
-    .then(
+    .then(() =>
       setPersons(persons.filter(n => n.id !== person.id))
     )
+    .then(() => {
+      setNotificationMessage(`Removed ${person.name}`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    })
+    .catch(error => {
+      setErrorMessage(`${person.name} has already been removed`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      setPersons(persons.filter(n => n.id !== person.id))
+    })
   }
 }
 
@@ -104,6 +127,10 @@ const removePerson = (person) => {
       <Notification
         message={notificationMessage}
         className="success"
+      />
+      <Notification
+        message={errorMessage}
+        className="error"
       />
       <Filter
         text="filter shown with:"
