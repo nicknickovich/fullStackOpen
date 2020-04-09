@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personsService from './services/persons'
+import './index.css'
 
 
 const App = () => {
@@ -11,6 +13,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch ] = useState('')
+  const [ notificationMessage, setNotificationMessage ] = useState(null)
 
   useEffect(() => {
     personsService
@@ -44,6 +47,12 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
+          .then(() => {
+            setNotificationMessage(`Updated ${newPerson.name}'s number`)
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 5000)
+          })
       }
     } else {
       personsService
@@ -52,6 +61,12 @@ const App = () => {
           setPersons(persons.concat(personsData))
           setNewName('')
           setNewNumber('')
+        })
+        .then(() => {
+          setNotificationMessage(`Added ${newPerson.name}`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
         })
     }
   }
@@ -86,6 +101,10 @@ const removePerson = (person) => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification
+        message={notificationMessage}
+        className="success"
+      />
       <Filter
         text="filter shown with:"
         value={search}
