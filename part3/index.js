@@ -14,8 +14,10 @@ morgan.token('body', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
-app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => response.json(persons))
+app.get('/api/persons', (request, response, next) => {
+  Person.find({})
+    .then(persons => response.json(persons))
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -30,7 +32,7 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   if (!request.body) {
     return response.status(400).json({
       "error": "name missing"
@@ -47,9 +49,11 @@ app.post('/api/persons', (request, response) => {
     number: request.body.number,
   })
 
-  person.save().then(savedPerson => {
-    response.json(savedPerson.toJSON())
-  })
+  person.save()
+    .then(savedPerson => {
+      response.json(savedPerson.toJSON())
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -70,6 +74,20 @@ app.put('/api/persons/:id', (request, response, next) => {
       response.json(updatedPerson.toJSON())
     })
     .catch(error => next(error))
+})
+
+app.get('/info', (request, response, next) => {
+  const timestamp = new Date()
+  Person.find({})
+    .then((persons) => {
+      response.send(
+`<div>
+  <p>there are ${persons.length} entries in the phonebook</p>
+  <p>${timestamp}</p>
+</div>`
+      )
+    })
+    .catch(error => error(next))
 })
 
 const unknownEndpoint = (request, response) => {
