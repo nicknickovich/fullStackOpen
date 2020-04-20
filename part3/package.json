@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build:ui": "rm -rf build && cd ../part2/phonebook && npm run build --prod && cp -r build ../../part3",
+    "deploy": "git push heroku master",
     "test": "echo \"No tests specified\""
   },
   "author": "Nick Poberezhnyk",
