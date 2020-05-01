@@ -1,6 +1,6 @@
 const listHelper = require('../utils/list_helper')
 
-const all_blogs = [
+const allBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
     title: 'React patterns',
@@ -61,11 +61,11 @@ describe('total likes', () => {
     expect(listHelper.totalLikes([])).toBe(0)
   })
   test('array of one element has as many likes', () => {
-    const blogs = all_blogs.slice(0, 1)
+    const blogs = allBlogs.slice(0, 1)
     expect(listHelper.totalLikes(blogs)).toBe(7)
   })
   test('array of three elements', () => {
-    const blogs = all_blogs.slice(0, 3)
+    const blogs = allBlogs.slice(0, 3)
     expect(listHelper.totalLikes(blogs)).toBe(24)
   })
 })
@@ -75,11 +75,25 @@ describe('favorite blog', () => {
     expect(listHelper.favoriteBlog([])).toEqual(null)
   })
   test('array of one element returns that element', () => {
-    const blogs = all_blogs.slice(0, 1)
+    const blogs = allBlogs.slice(0, 1)
     expect(listHelper.favoriteBlog(blogs)).toEqual(blogs[0])
   })
   test('array of three elements', () => {
-    const blogs = all_blogs.slice(0, 3)
+    const blogs = allBlogs.slice(0, 3)
     expect(listHelper.favoriteBlog(blogs)).toEqual(blogs[2])
+  })
+})
+
+describe('most blogs', () => {
+  test('empty array returns null', () => {
+    expect(listHelper.mostBlogs([])).toEqual(null)
+  })
+  test('array of one blog returns author of that blog', () => {
+    const blogs = allBlogs.slice(0, 1)
+    expect(listHelper.mostBlogs(blogs)).toEqual('Michael Chan')
+  })
+  test('array of four elements', () => {
+    const blogs = allBlogs.slice(0, 4)
+    expect(listHelper.mostBlogs(blogs)).toEqual('Edsger W. Dijkstra')
   })
 })
