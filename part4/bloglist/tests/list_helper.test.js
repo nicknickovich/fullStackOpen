@@ -90,10 +90,36 @@ describe('most blogs', () => {
   })
   test('array of one blog returns author of that blog', () => {
     const blogs = allBlogs.slice(0, 1)
-    expect(listHelper.mostBlogs(blogs)).toEqual('Michael Chan')
+    expect(listHelper.mostBlogs(blogs)).toEqual({
+      author: 'Michael Chan',
+      blogs: 1
+    })
   })
   test('array of four elements', () => {
     const blogs = allBlogs.slice(0, 4)
-    expect(listHelper.mostBlogs(blogs)).toEqual('Edsger W. Dijkstra')
+    expect(listHelper.mostBlogs(blogs)).toEqual({
+      author: 'Edsger W. Dijkstra',
+      blogs: 2
+    })
+  })
+})
+
+describe('most likes', () => {
+  test('empty array returns null', () => {
+    expect(listHelper.mostLikes([])).toEqual(null)
+  })
+  test('array of one element', () => {
+    const blogs = allBlogs.slice(0, 1)
+    expect(listHelper.mostLikes(blogs)).toEqual({
+      author: 'Michael Chan',
+      likes: 7
+    })
+  })
+  test('array of six elements', () => {
+    const blogs = allBlogs.slice(0, 6)
+    expect(listHelper.mostLikes(blogs)).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    })
   })
 })
