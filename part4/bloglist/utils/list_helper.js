@@ -54,7 +54,6 @@ const mostLikes = (blogs) => {
   const mostLikes = Math.max(...likesByAuthor.map(
     x => x['likes']
   ))
-  console.log(mostLikes)
   return likesByAuthor.find(author => author.likes === mostLikes)
 }
 

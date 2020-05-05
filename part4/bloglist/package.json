@@ -4,10 +4,10 @@
   "description": "\"list of interesting blogposts\"",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
-    "test": "jest --verbose"
+    "test": "NODE_ENV=test jest --verbose --runInBand"
   },
   "author": "Nick Poberezhnyk",
   "license": "MIT",
@@ -21,7 +21,8 @@
   "devDependencies": {
     "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "supertest": "^4.0.2"
   },
   "jest": {
     "testEnvironment": "node"
