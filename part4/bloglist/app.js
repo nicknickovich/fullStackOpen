@@ -1,5 +1,6 @@
 const config = require('./utils/config')
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const blogsRouter = require('./controllers/blogs')
@@ -8,6 +9,9 @@ const logger = require('./utils/logger')
 
 const mongoUrl = config.MONGODB_URI
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+
+mongoose.set('useFindAndModify', false)
+mongoose.set('useCreateIndex', true)
 
 app.use(cors())
 app.use(express.json())

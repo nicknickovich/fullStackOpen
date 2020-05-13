@@ -3,7 +3,11 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { initialBlogs, blogsInDb } = require('./test_helper')
+const {
+  initialBlogs,
+  blogsInDb,
+  nonExistentId
+} = require('./test_helper')
 
 
 beforeEach(async () => {
@@ -54,6 +58,12 @@ describe('get requests', () => {
     const contents = response.body
 
     expect(contents[2]['id']).toBeDefined()
+  })
+  test('404 when blog does not exist', async () => {
+    const fakeId = await nonExistentId()
+    await api
+      .get(`/api/blogs/${fakeId}`)
+      .expect(404)
   })
 })
 
@@ -129,6 +139,37 @@ describe('post requests', () => {
   })
 })
 
+describe('put requests', () => {
+  test('able to update a blog', async () => {
+    const updatedBlog = {
+      _id: '5a422a851b54a676234d17f7',
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 8,
+      __v: 0
+    }
+    await api
+      .put(`/api/blogs/${updatedBlog._id}`)
+      .send(updatedBlog)
+
+    const blogAfterUpdate = await api.get(`/api/blogs/${updatedBlog._id}`)
+    expect(blogAfterUpdate.body.likes).toBe(8)
+  })
+})
+
+describe('delete requests', () => {
+  test('able to delete a blog', async () => {
+    console.log(initialBlogs[0]._id)
+    await api
+      .delete(`/api/blogs/${initialBlogs[0]._id}`)
+      .expect(204)
+
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length - 1)
+    expect(blogsAtEnd.map(blog => blog.id)).not.toContain(initialBlogs[0]._id)
+  })
+})
 
 
 
