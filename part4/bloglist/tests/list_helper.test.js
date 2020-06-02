@@ -42,14 +42,14 @@ describe('most blogs', () => {
   test('array of one blog returns author of that blog', () => {
     const blogs = initialBlogs.slice(0, 1)
     expect(listHelper.mostBlogs(blogs)).toEqual({
-      author: 'Michael Chan',
+      author: '5ed602798cdfe9529a6f6f2c',
       blogs: 1
     })
   })
   test('array of four elements', () => {
     const blogs = initialBlogs.slice(0, 4)
     expect(listHelper.mostBlogs(blogs)).toEqual({
-      author: 'Edsger W. Dijkstra',
+      author: '5ed602ad8cdfe9529a6f6f2d',
       blogs: 2
     })
   })
@@ -62,14 +62,14 @@ describe('most likes', () => {
   test('array of one element', () => {
     const blogs = initialBlogs.slice(0, 1)
     expect(listHelper.mostLikes(blogs)).toEqual({
-      author: 'Michael Chan',
+      author: '5ed602798cdfe9529a6f6f2c',
       likes: 7
     })
   })
   test('array of five elements', () => {
     const blogs = initialBlogs.slice(0, 5)
     expect(listHelper.mostLikes(blogs)).toEqual({
-      author: 'Edsger W. Dijkstra',
+      author: '5ed602ad8cdfe9529a6f6f2d',
       likes: 17
     })
   })

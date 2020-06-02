@@ -26,32 +26,32 @@ describe('basic tests', () => {
   test('able to add new user', async () => {
     const usersAtStart = await usersInDb()
 
-    const newUser = new User({
+    const newUser = {
       username: 'padfoot',
       name: 'Sirius Black',
-      password: 'azkabangotohell'
-    })
+      password: 'password'
+    }
 
     await api
       .post('/api/users')
       .send(newUser)
-      .expect(200)
+      .expect(201)
       .expect('Content-Type', /application\/json/)
 
     const usersAtEnd = await usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
-    const usernames = await usersAtEnd(user => user.username)
+    const usernames = await usersAtEnd.map(user => user.username)
     expect(usernames).toContain(newUser.username)
   })
   test('error when trying to create a user with existing username', async () => {
     const usersAtStart = await usersInDb()
 
-    const newUser = new User({
+    const newUser = {
       username: 'first',
       name: 'John Smith',
       password: 'secret'
-    })
+    }
 
     const result = await api
       .post('/api/users')
@@ -59,10 +59,47 @@ describe('basic tests', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
-    expect(result.body.errors).toContain('`username` to be unique')
+    expect(result.body.error).toContain('`username` to be unique')
 
     const usersAtEnd = await usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+  test('error if username is less than 3 characters', async () => {
+    const usersAtStart = await usersInDb()
+
+    const newUser = {
+      username: 'fi',
+      name: 'John Smith',
+      password: 'secret'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+
+    expect(result.body.error).toMatch(/username.*is shorter than the minimum allowed length/)
+    console.log(result.body.error)
+    const usersAtEnd = await usersInDb()
+    expect(usersAtStart).toHaveLength(usersAtEnd.length)
+  })
+  test('error if password is less than 3 characters', async () => {
+    const usersAtStart = await usersInDb()
+
+    const newUser = {
+      username: 'first',
+      name: 'John Smith',
+      password: 'se'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+
+    expect(result.body.error).toContain('password should be more than 3 characters long')
+    const usersAtEnd = await usersInDb()
+    expect(usersAtStart).toHaveLength(usersAtEnd.length)
   })
 })
 
