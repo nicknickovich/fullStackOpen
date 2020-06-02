@@ -20,18 +20,18 @@ beforeEach(async () => {
 })
 
 describe('get requests', () => {
-  test('blogs are returned as json', async () => {
+  xtest('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
-  test('all blogs are fetched', async () => {
+  xtest('all blogs are fetched', async () => {
     const response = await api.get('/api/blogs')
 
     expect(response.body).toHaveLength(initialBlogs.length)
   })
-  test('a specific blog has right content', async () => {
+  xtest('a specific blog has right content', async () => {
     const response = await api.get('/api/blogs')
     const contents = response.body
 
@@ -43,7 +43,7 @@ describe('get requests', () => {
       likes: 5
     })
   })
-  test('fetch specific blog', async () => {
+  xtest('fetch specific blog', async () => {
     const response = await api.get(`/api/blogs/${initialBlogs[1]['_id']}`)
     expect(response.body).toEqual({
       id: '5a422aa71b54a676234d17f8',
@@ -53,13 +53,13 @@ describe('get requests', () => {
       likes: 5
     })
   })
-  test('returned objects have attribute id', async () => {
+  xtest('returned objects have attribute id', async () => {
     const response = await api.get('/api/blogs')
     const contents = response.body
 
     expect(contents[2]['id']).toBeDefined()
   })
-  test('404 when blog does not exist', async () => {
+  xtest('404 when blog does not exist', async () => {
     const fakeId = await nonExistentId()
     await api
       .get(`/api/blogs/${fakeId}`)
@@ -68,7 +68,7 @@ describe('get requests', () => {
 })
 
 describe('post requests', () => {
-  test('able to add a blog', async () => {
+  xtest('able to add a blog', async () => {
     const newBlog = {
       _id: '5a422bc61b54a676234d17fc',
       title: 'Type wars',
@@ -95,7 +95,7 @@ describe('post requests', () => {
       likes: 2,
     })
   })
-  test('if not specified, number of likes defaults to 0', async () => {
+  xtest('if not specified, number of likes defaults to 0', async () => {
     const newBlog = {
       _id: '5a422bc61b54a676234d17fc',
       title: 'Type wars',
@@ -111,7 +111,7 @@ describe('post requests', () => {
     const newBlogLikes = blogsAtEnd[initialBlogs.length]['likes']
     expect(newBlogLikes).toBe(0)
   })
-  test('error if url is not specified', async () => {
+  xtest('error if url is not specified', async () => {
     const newBlog = {
       _id: '5a422bc61b54a676234d17fc',
       title: 'Type wars',
@@ -124,7 +124,7 @@ describe('post requests', () => {
       .send(newBlog)
       .expect(400)
   })
-  test('error if title is not specified', async () => {
+  xtest('error if title is not specified', async () => {
     const newBlog = {
       _id: '5a422bc61b54a676234d17fc',
       author: 'Robert C. Martin',
@@ -140,7 +140,7 @@ describe('post requests', () => {
 })
 
 describe('put requests', () => {
-  test('able to update a blog', async () => {
+  xtest('able to update a blog', async () => {
     const updatedBlog = {
       _id: '5a422a851b54a676234d17f7',
       title: 'React patterns',
@@ -159,8 +159,7 @@ describe('put requests', () => {
 })
 
 describe('delete requests', () => {
-  test('able to delete a blog', async () => {
-    console.log(initialBlogs[0]._id)
+  xtest('able to delete a blog', async () => {
     await api
       .delete(`/api/blogs/${initialBlogs[0]._id}`)
       .expect(204)
@@ -170,9 +169,6 @@ describe('delete requests', () => {
     expect(blogsAtEnd.map(blog => blog.id)).not.toContain(initialBlogs[0]._id)
   })
 })
-
-
-
 
 
 afterAll(() => {

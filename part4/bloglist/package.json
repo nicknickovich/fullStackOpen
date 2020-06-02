@@ -1,7 +1,7 @@
 {
   "name": "bloglist",
   "version": "1.0.0",
-  "description": "\"list of interesting blogposts\"",
+  "description": "list of interesting blogposts",
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=production node index.js",
@@ -12,12 +12,14 @@
   "author": "Nick Poberezhnyk",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "jest": "^25.4.0",
     "lodash": "^4.17.15",
-    "mongoose": "^5.9.10"
+    "mongoose": "^5.9.10",
+    "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
