@@ -8,6 +8,7 @@ const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const mongoose = require('mongoose')
 const logger = require('./utils/logger')
+const tokenExtractor = require('./utils/middleware')
 
 
 const mongoUrl = config.MONGODB_URI
@@ -19,6 +20,7 @@ mongoose.set('useCreateIndex', true)
 app.use(cors())
 app.use(express.json())
 
+app.use(tokenExtractor)
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
@@ -39,6 +41,9 @@ const errorHandler = (error, request, response, next) => {
   }
   if (error.name === 'JsonWebTokenError') {
     return response.status(401).json({ error: 'invalid token' })
+  }
+  if (error.name === 'SyntaxError') {
+    return response.status(400).json({ error: 'malformed request' })
   }
   next(error)
 }
